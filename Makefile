@@ -9,8 +9,8 @@ CFLAGS = -Wall
 
 all: kernel8.img clean
 
-main.o: main.s
-	$(CC) $(CFLAGS) -c main.s -o main.o
+main.o: main.S
+	$(CC) $(CFLAGS) -c main.S -o main.o
 
 kernel8.img: main.o
 	$(LD) -T linker.ld -o kernel8.elf main.o
