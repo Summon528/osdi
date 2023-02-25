@@ -1,5 +1,4 @@
 int strncmp(const char *s1, const char *s2, int n) {
-
   if (n == 0)
     return (0);
   do {
@@ -16,4 +15,13 @@ void *memset(void *ptr, int c, unsigned long len) {
     ((char *)ptr)[i] = (unsigned char)c;
   }
   return ptr;
+}
+
+int strlen(const char *a) {
+  int cnt = 0;
+  while (*a != '\0') {
+    cnt++;
+    a++;
+  }
+  return cnt;
 }

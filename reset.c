@@ -14,3 +14,5 @@ void cancel_reset() {
   set(PM_RSTC, PM_PASSWORD | 0); // full reset
   set(PM_WDOG, PM_PASSWORD | 0); // number of watchdog tick
 }
+
+void shell_reset() { reset(1); }
