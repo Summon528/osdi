@@ -1,4 +1,5 @@
 #include "help.h"
+#include "image.h"
 #include "mbox.h"
 #include "reset.h"
 #include "uart.h"
@@ -12,7 +13,8 @@ typedef struct cmd {
 static cmd_t cmds[] = {{"help", shell_help},
                        {"hello", shell_hello},
                        {"mbox", shell_mbox},
-                       {"reset", shell_reset}};
+                       {"reset", shell_reset},
+                       {"image", shell_image}};
 
 int main() {
   uart_init();
