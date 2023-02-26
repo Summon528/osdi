@@ -4,7 +4,8 @@
 static char *help = "help\tprint all available commands\r\n"
                     "hello\tprint Hello World!\r\n"
                     "mbox\tprint mbox info\r\n"
-                    "reset\treset\r\n";
+                    "reset\treset\r\n"
+                    "image\tflash and boot an image\r\n";
 
 void shell_help() { uart_puts(help); }
 
