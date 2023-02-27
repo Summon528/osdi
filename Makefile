@@ -5,7 +5,7 @@ OBJCPY = $(TOOLCHAIN_PREFIX)objcopy
 
 SRCS = $(wildcard *.c)
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall -O2 -ffreestanding -nostdinc -nostdlib -nostartfiles -g
+CFLAGS = -Wall -O0 -ffreestanding -nostdinc -nostdlib -nostartfiles -g
 
 all: kernel8.img
 
@@ -23,4 +23,7 @@ clean:
 	rm kernel8.img kernel8.elf *.o >/dev/null 2>/dev/null || true
 
 run:
-	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -serial null -serial pty -s
+	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -serial null -serial stdio -s -initrd initramfs.cpio
+
+run-pty:
+	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -serial null -serial pty -s -initrd initramfs.cpio

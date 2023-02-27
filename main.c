@@ -1,4 +1,6 @@
+#include "cpio.h"
 #include "help.h"
+#include "help2.h"
 #include "image.h"
 #include "mbox.h"
 #include "reset.h"
@@ -10,11 +12,10 @@ typedef struct cmd {
   void (*handler)();
 } cmd_t;
 
-static cmd_t cmds[] = {{"help", shell_help},
-                       {"hello", shell_hello},
-                       {"mbox", shell_mbox},
-                       {"reset", shell_reset},
-                       {"image", shell_image}};
+static cmd_t cmds[] = {{"help", shell_help},    {"hello", shell_hello},
+                       {"mbox", shell_mbox},    {"reset", shell_reset},
+                       {"image", shell_image},  {"ls", shell_cpio_ls},
+                       {"cat", shell_cpio_cat}, {"2hello", shell_hello2}};
 
 int main() {
   uart_init();
