@@ -8,7 +8,8 @@ static char *help = "help\tprint all available commands\r\n"
                     "image\tflash and boot an image\r\n"
                     "malloc\tsimple malloc\r\n"
                     "ls\tls ramdisk\r\n"
-                    "cat\tcat ramdisk\r\n";
+                    "cat\tcat ramdisk\r\n"
+                    "el\tshow current el\r\n";
 
 void shell_help() { uart_puts(help); }
 

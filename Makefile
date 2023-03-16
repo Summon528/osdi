@@ -28,8 +28,8 @@ bootloader: bootloader.img
 clean:
 	rm kernel8.img kernel8.elf *.o >/dev/null 2>/dev/null || true
 
-run:
+run: kernel8.img
 	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -serial null -serial stdio -s -initrd initramfs.cpio
 
-run-pty:
-	qemu-system-aarch64 -M raspi3b -kernel kernel8.img -serial null -serial pty -s -initrd initramfs.cpio
+run-pty: bootloader
+	qemu-system-aarch64 -M raspi3b -kernel bootloader.img -serial null -serial pty -s -initrd initramfs.cpio
