@@ -5,7 +5,7 @@
 int mem_used = 0;
 
 void *simple_malloc(unsigned int size) {
-  void *r = HEAP_ADDR + mem_used;
+  void *r = (void *)HEAP_ADDR + mem_used;
   mem_used += size;
   return r;
 }

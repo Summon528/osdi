@@ -33,7 +33,7 @@ unsigned int hex_to_uint(char hex[8]) {
 unsigned int round_to_4(unsigned int x) { return ((x - 1) / 4 + 1) * 4; }
 
 void lscat(short do_cat) {
-  void *addr = INITRAMFS_ADDR;
+  void *addr = (void *)INITRAMFS_ADDR;
   while (1) {
     struct cpio_newc_header *hdr = (struct cpio_newc_header *)addr;
     unsigned int fsize = hex_to_uint(hdr->c_filesize);
@@ -62,5 +62,27 @@ void lscat(short do_cat) {
   }
 }
 
+void cpio_read_user_prog() {
+  void *addr = (void *)INITRAMFS_ADDR;
+  while (1) {
+    struct cpio_newc_header *hdr = (struct cpio_newc_header *)addr;
+    unsigned int fsize = hex_to_uint(hdr->c_filesize);
+    unsigned int nsize = hex_to_uint(hdr->c_namesize);
+    void *content_addr =
+        addr + round_to_4(sizeof(struct cpio_newc_header) + nsize);
+    if (nsize == 0xB && fsize == 0 &&
+        strncmp(content_addr, "TRAILER!!!", 0xB)) {
+      break;
+    }
+    addr += sizeof(struct cpio_newc_header);
+    if (strncmp((char *)addr, "user.img", nsize) == 0) {
+      uart_puts("Found!");
+      for (int i = 0; i < fsize; i++) {
+        *((char *)USER_PROG_ADDR + i) = *((char *)content_addr + i);
+      }
+    }
+    addr = content_addr + round_to_4(fsize);
+  }
+}
 void shell_cpio_ls() { lscat(0); }
 void shell_cpio_cat() { lscat(1); }

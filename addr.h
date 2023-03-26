@@ -1,4 +1,6 @@
 #pragma once
-#define TMP_KERNEL_ADDR (void *)0x80000
-#define INITRAMFS_ADDR (void *)0x8000000
-#define HEAP_ADDR (void *)0x2000000
+#define TMP_KERNEL_ADDR 0x80000
+#define INITRAMFS_ADDR 0x8000000
+#define HEAP_ADDR 0x2000000
+#define USER_PROG_ADDR 0x200000
+#define USER_PROG_STACK_ADDR 0x210000

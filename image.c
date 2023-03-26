@@ -14,7 +14,7 @@ void shell_image() {
   uart_puts("Image size: ");
   uart_hex(img_size);
   uart_puts("\r\n");
-  char *addr = TMP_KERNEL_ADDR;
+  char *addr = (char *)TMP_KERNEL_ADDR;
   for (int i = 0; i < img_size; i++) {
     char c = uart_getc_raw();
     *(addr + i) = c;
