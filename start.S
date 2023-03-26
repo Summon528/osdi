@@ -37,6 +37,7 @@ _start:
 go:  // cpu id == 0
 
     bl from_el2_to_el1
+    bl set_exception_vector_table
 
     // clear bss
     ldr     x1, =__bss_start
@@ -64,6 +65,11 @@ from_el2_to_el1:
     msr elr_el2, lr
     eret                    // return to EL1
     
+set_exception_vector_table:
+  adr x0, exception_vector_table
+  msr vbar_el1, x0
+  ret
+
 loop:
     wfe
     b loop

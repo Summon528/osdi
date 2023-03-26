@@ -76,7 +76,7 @@ void cpio_read_user_prog() {
     }
     addr += sizeof(struct cpio_newc_header);
     if (strncmp((char *)addr, "user.img", nsize) == 0) {
-      uart_puts("Found!");
+      uart_puts("Found!\n");
       for (int i = 0; i < fsize; i++) {
         *((char *)USER_PROG_ADDR + i) = *((char *)content_addr + i);
       }

@@ -12,15 +12,18 @@ all: kernel8.img bootloader cpio user
 start.o: start.S
 	$(CC) $(CFLAGS) -c start.S -o start.o
 
+exception.o: exception.S
+	$(CC) $(CFLAGS) -c exception.S -o exception.o
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-kernel8.img: start.o $(OBJS)
-	$(LD) start.o $(OBJS) -T link.ld -o kernel8.elf
+kernel8.img: start.o exception.o $(OBJS)
+	$(LD) start.o exception.o $(OBJS) -T link.ld -o kernel8.elf
 	$(OBJCPY) -O binary kernel8.elf kernel8.img
 
-bootloader.img: start.o $(OBJS)
-	$(LD) start.o $(OBJS) -T link.bootloader.ld -o bootloader.elf
+bootloader.img: start.o exception.o $(OBJS)
+	$(LD) start.o exception.o $(OBJS) -T link.bootloader.ld -o bootloader.elf
 	$(OBJCPY) -O binary bootloader.elf bootloader.img
 
 kernel: kernel8.img
