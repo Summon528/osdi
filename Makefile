@@ -4,26 +4,25 @@ LD = $(TOOLCHAIN_PREFIX)ld
 OBJCPY = $(TOOLCHAIN_PREFIX)objcopy
 
 SRCS = $(wildcard *.c)
+ASM_SRCS = $(wildcard *.S)
 OBJS = $(SRCS:.c=.o)
+ASM_OBJS = $(ASM_SRCS:.S=.o)
 CFLAGS = -Wall -O2 -ffreestanding -nostdinc -nostdlib -nostartfiles -g
 
 all: kernel8.img bootloader cpio user
 
-start.o: start.S
-	$(CC) $(CFLAGS) -c start.S -o start.o
-
-exception.o: exception.S
-	$(CC) $(CFLAGS) -c exception.S -o exception.o
+%.o: %.S
+	$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-kernel8.img: start.o exception.o $(OBJS)
-	$(LD) start.o exception.o $(OBJS) -T link.ld -o kernel8.elf
+kernel8.img: $(ASM_OBJS) $(OBJS)
+	$(LD) $(ASM_OBJS) $(OBJS) -T link.ld -o kernel8.elf
 	$(OBJCPY) -O binary kernel8.elf kernel8.img
 
-bootloader.img: start.o exception.o $(OBJS)
-	$(LD) start.o exception.o $(OBJS) -T link.bootloader.ld -o bootloader.elf
+bootloader.img: $(ASM_OBJS) $(OBJS)
+	$(LD) $(ASM_OBJS) $(OBJS) -T link.bootloader.ld -o bootloader.elf
 	$(OBJCPY) -O binary bootloader.elf bootloader.img
 
 kernel: kernel8.img
