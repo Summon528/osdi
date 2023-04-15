@@ -7,6 +7,7 @@
 #include "mbox.h"
 #include "reset.h"
 #include "task.h"
+#include "timer.h"
 #include "uart.h"
 #include "utils.h"
 
@@ -19,14 +20,12 @@ static cmd_t cmds[] = {
     {"help", shell_help},    {"hello", shell_hello},   {"mbox", shell_mbox},
     {"reset", shell_reset},  {"image", shell_image},   {"ls", shell_cpio_ls},
     {"cat", shell_cpio_cat}, {"malloc", shell_malloc}, {"el", shell_el},
-    {"exec", shell_exec},    {"go", shell_task}};
+    {"exec", shell_exec},    {"task", shell_task}};
 
-int main() {
-  uart_init();
+void kernel_main() {
   char str[11] = {};
   unsigned short idx = 0;
 
-  uart_puts("\r\nWelcome\r\n");
   while (1) {
     uart_puts("> ");
 
@@ -64,4 +63,13 @@ int main() {
       uart_send(c);
     }
   }
+}
+
+int main() {
+  uart_init();
+  uart_puts("\r\nWelcome\r\n");
+  core_timer_enable();
+  task_create(kernel_main);
+  kernel_main();
+  return 0;
 }

@@ -1,4 +1,5 @@
 #include "task.h"
+#include "addr.h"
 #include "context.h"
 #include "malloc.h"
 #include "uart.h"
@@ -14,7 +15,7 @@ task_queue *tq = 0;
 void task_create(void (*f)()) {
   if (tq == 0) {
     tq = simple_malloc(sizeof(task_queue));
-    tq->rr_idx = -1;
+    tq->rr_idx = 0;
     tq->q = simple_malloc(sizeof(task_t *) * 10);
     tq->new_idx = 0;
   }
@@ -27,8 +28,8 @@ void task_create(void (*f)()) {
   task_t *t = simple_malloc(sizeof(task_t));
 
   t->regs.lr = (unsigned long)f;
-  t->regs.fp = 0x210000 + tq->new_idx * 10000;
-  t->regs.sp = 0x210000;
+  t->regs.fp = KERNEL_TASK_ADDR + tq->new_idx * 10000;
+  t->regs.sp = t->regs.fp;
   t->valid = 1;
   tq->q[tq->new_idx] = t;
   tq->new_idx++;
@@ -36,21 +37,13 @@ void task_create(void (*f)()) {
 
 void schedule() {
   int prev_idx = tq->rr_idx;
-  if (prev_idx == -1) {
-    tq->rr_idx = 0;
-    restore_task(tq->q[tq->rr_idx]);
-    return;
-  }
-  save_task(tq->q[prev_idx]);
   while (1) {
     tq->rr_idx = (tq->rr_idx + 1) % tq->new_idx;
     if (tq->q[tq->rr_idx]->valid) {
       break;
     }
   }
-  uart_hex(tq->rr_idx);
-  uart_puts("\n");
-  restore_task(tq->q[tq->rr_idx]);
+  switch_to(tq->q[prev_idx], tq->q[tq->rr_idx]);
 }
 
 void task_end() {
@@ -60,16 +53,22 @@ void task_end() {
 }
 
 void gogo() {
-  uart_puts("gogogo\n");
+  while (1) {
+    uart_puts("1");
+  }
   task_end();
 }
 void gogo2() {
-  uart_puts("gogogo2\n");
+  while (1) {
+    uart_puts("2");
+  }
   task_end();
 }
 
 void gogo3() {
-  uart_puts("gogogo3\n");
+  while (1) {
+    uart_puts("3");
+  }
   task_end();
 }
 
@@ -77,5 +76,4 @@ void shell_task() {
   task_create(gogo);
   task_create(gogo2);
   task_create(gogo3);
-  schedule();
 }

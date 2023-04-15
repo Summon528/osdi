@@ -1,4 +1,5 @@
 #include "eentry.h"
+#include "task.h"
 #include "uart.h"
 
 void exception_entry() {
@@ -63,6 +64,27 @@ void irq_entry() {
                :
                : "r"(freq2)
                : "x0", "x1");
+}
 
-  asm volatile("eret");
+void schedule_entry() {
+  unsigned long freq;
+  asm volatile("mrs x1, cntfrq_el0\n\t"
+               "mov %0, x1\n\t"
+               : "=r"(freq)
+               :
+               : "x1");
+
+  unsigned long freq2 = freq;
+  asm volatile("mov x0, 1\n\t"
+               "msr cntp_ctl_el0, x0\n\t"
+               "mov x0, %0\n\t"
+               "msr cntp_tval_el0, x0\n\t"
+               "mov x0, 2\n\t"
+               "ldr x1, =0x40000040\n\t"
+               "str w0, [x1]\n\t"
+               :
+               : "r"(freq2)
+               : "x0", "x1");
+
+  schedule();
 }

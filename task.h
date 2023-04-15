@@ -21,5 +21,6 @@ typedef struct {
   int valid;
 } task_t;
 
-void shread_create(void (*f)());
+void task_create(void (*f)());
+void schedule();
 void shell_task();
