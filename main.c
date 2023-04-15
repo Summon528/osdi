@@ -6,7 +6,7 @@
 #include "malloc.h"
 #include "mbox.h"
 #include "reset.h"
-#include "thread.h"
+#include "task.h"
 #include "uart.h"
 #include "utils.h"
 
@@ -19,7 +19,7 @@ static cmd_t cmds[] = {
     {"help", shell_help},    {"hello", shell_hello},   {"mbox", shell_mbox},
     {"reset", shell_reset},  {"image", shell_image},   {"ls", shell_cpio_ls},
     {"cat", shell_cpio_cat}, {"malloc", shell_malloc}, {"el", shell_el},
-    {"exec", shell_exec},    {"go", shell_thread}};
+    {"exec", shell_exec},    {"go", shell_task}};
 
 int main() {
   uart_init();
