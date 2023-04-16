@@ -19,8 +19,11 @@ typedef struct {
 typedef struct {
   registers_t regs;
   int valid;
+  int tid;
 } task_t;
 
 void task_create(void (*f)());
 void schedule();
+void task_end();
+int task_getid();
 void shell_task();

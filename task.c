@@ -11,6 +11,7 @@ typedef struct {
 } task_queue;
 
 task_queue *tq = 0;
+int tid = 0;
 
 void task_create(void (*f)()) {
   if (tq == 0) {
@@ -31,6 +32,7 @@ void task_create(void (*f)()) {
   t->regs.fp = KERNEL_TASK_ADDR + tq->new_idx * 10000;
   t->regs.sp = t->regs.fp;
   t->valid = 1;
+  t->tid = tid++;
   tq->q[tq->new_idx] = t;
   tq->new_idx++;
 }
@@ -50,6 +52,11 @@ void task_end() {
   task_t *t = (task_t *)get_current();
   t->valid = 0;
   schedule();
+}
+
+int task_getid() {
+  task_t *t = (task_t *)get_current();
+  return t->tid;
 }
 
 void gogo() {

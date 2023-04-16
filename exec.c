@@ -1,10 +1,11 @@
 #include "addr.h"
 #include "cpio.h"
+#include "task.h"
 #include "uart.h"
 
-void shell_exec() {
+void exec_user() {
   void *addr = (void *)USER_PROG_ADDR;
-  void *stack_addr = (void *)USER_PROG_STACK_ADDR;
+  void *stack_addr = (void *)USER_PROG_STACK_ADDR + task_getid() * 10000;
   cpio_read_user_prog();
 
   asm volatile("mov x0, 0x0\n\t"
@@ -12,5 +13,6 @@ void shell_exec() {
   asm volatile("msr elr_el1, %0" : : "r"(addr));
   asm volatile("msr sp_el0, %0" : : "r"(stack_addr));
   asm volatile("eret");
-  uart_puts("QQ");
 }
+
+void shell_exec() { task_create(exec_user); }
