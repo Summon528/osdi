@@ -2,10 +2,10 @@
 
 int main() {
   char s[] = ".";
-  for (int j = 0; j < 5; j++) {
+  for (int j = 0; j < 10; j++) {
+    write("PID=");
     int pid = getpid();
     s[0] = '0' + pid;
-    write("PID=");
     write(s);
     write("\n");
     for (int i = 0; i < 100000000; i++)

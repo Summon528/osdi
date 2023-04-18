@@ -12,13 +12,15 @@ all: user.img
 start.o: start.S
 	$(CC) $(CFLAGS) -c start.S -o start.o
 
+sys.o: sys.S
+	$(CC) $(CFLAGS) -c sys.S -o sys.o
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-user.img: start.o $(OBJS)
-	$(LD) start.o $(OBJS) -T link.ld -o user.elf
+user.img: start.o sys.o $(OBJS)
+	$(LD) start.o sys.o $(OBJS) -T link.ld -o user.elf
 	$(OBJCPY) -O binary user.elf user.img
-
 
 clean:
 	rm user.img user.elf *.o >/dev/null 2>/dev/null || true

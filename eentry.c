@@ -41,8 +41,6 @@ void exception_entry() {
 }
 
 void syscall_entry(trapframe_t *tf) {
-  uart_hex(tf->x[0]);
-  uart_puts("\n");
   switch (tf->x[0]) {
   case SYS_EXIT:
     task_end();
