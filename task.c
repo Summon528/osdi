@@ -15,6 +15,7 @@ int tid = 0;
 
 void task_create(void (*f)()) {
   if (tq == 0) {
+    tid = 0;
     tq = simple_malloc(sizeof(task_queue));
     tq->rr_idx = 0;
     tq->q = simple_malloc(sizeof(task_t *) * 10);

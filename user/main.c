@@ -2,13 +2,13 @@
 
 int main() {
   char s[] = ".";
-  for (int j = 0; j < 10; j++) {
+  for (int j = 0; j < 5; j++) {
     write("PID=");
     int pid = getpid();
     s[0] = '0' + pid;
     write(s);
     write("\n");
-    for (int i = 0; i < 100000000; i++)
+    for (int i = 0; i < 500000; i++)
       ;
   }
   char s2[] = "PID=? EXIT\n";
