@@ -2,7 +2,7 @@
 
 int main() {
   char s[] = ".";
-  for (int j = 0; j < 10; j++) {
+  for (int j = 0; j < 5; j++) {
     int pid = getpid();
     s[0] = '0' + pid;
     write("PID=");

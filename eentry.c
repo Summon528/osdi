@@ -3,6 +3,13 @@
 #include "uart.h"
 #include "user/sys.h"
 
+typedef struct trapframe {
+  unsigned long x[31]; // general register from x0 ~ x30
+  unsigned long sp_el0;
+  unsigned long elr_el1;
+  unsigned long spsr_el1;
+} trapframe_t;
+
 void exception_entry() {
   unsigned long x;
   asm volatile("mrs x1, spsr_el1\n\t"
@@ -33,21 +40,18 @@ void exception_entry() {
   uart_puts("\n");
 }
 
-void syscall_entry() {
-  unsigned long x;
-  asm volatile("mov %0, x0" : "=r"(x));
-
-  switch (x) {
+void syscall_entry(trapframe_t *tf) {
+  uart_hex(tf->x[0]);
+  uart_puts("\n");
+  switch (tf->x[0]) {
   case SYS_EXIT:
     task_end();
     break;
   case SYS_GETPID:
-    x = task_getid();
-    asm volatile("mov x0, %0" : : "r"(x));
+    tf->x[0] = task_getid();
     break;
   case SYS_UART_WRITE:
-    asm volatile("mov %0, x1" : "=r"(x));
-    uart_puts((char *)x);
+    uart_puts((char *)tf->x[1]);
     break;
   }
 }
