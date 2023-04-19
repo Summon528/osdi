@@ -33,7 +33,8 @@ void task_create(void (*f)()) {
 
   t->user_sp = 0;
   t->regs.lr = (unsigned long)f;
-  t->regs.fp = KERNEL_TASK_ADDR + tq->new_idx * 10000;
+  t->tf = simple_malloc(2048) + 1024;
+  t->regs.fp = (long)t->tf;
   t->regs.sp = t->regs.fp;
   t->valid = 1;
   t->tid = tid++;
@@ -65,7 +66,6 @@ void temp_load_all() {
                "add sp, sp, #272\r\n"
                "eret\r\n");
 }
-
 
 int task_clone_current(trapframe_t *tf) {
   task_t *t1 = get_current();
