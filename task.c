@@ -20,11 +20,11 @@ void task_create(void (*f)()) {
     tid = 0;
     tq = simple_malloc(sizeof(task_queue));
     tq->rr_idx = 0;
-    tq->q = simple_malloc(sizeof(task_t *) * 10);
+    tq->q = simple_malloc(sizeof(task_t *) * 100);
     tq->new_idx = 0;
   }
 
-  if (tq->new_idx == 10) {
+  if (tq->new_idx == 100) {
     uart_puts("too many threads");
     return;
   }
@@ -68,6 +68,10 @@ void temp_load_all() {
 }
 
 int task_clone_current(trapframe_t *tf) {
+  if (tq->new_idx == 100) {
+    uart_puts("too many threads");
+    return 0;
+  }
   task_t *t1 = get_current();
   task_t *t2 = simple_malloc(sizeof(task_t));
   memcpy(t2, t1, sizeof(task_t));
