@@ -73,7 +73,7 @@ int task_clone_current(trapframe_t *tf) {
   memcpy(t2, t1, sizeof(task_t));
   t2->user_sp = USER_PROG_STACK_ADDR + tid * 10000;
   memcpy((void *)t2->user_sp - 10000, (void *)t1->user_sp - 10000, 10000);
-  t2->tf = simple_malloc(256) + 128;
+  t2->tf = simple_malloc(2048) + 1024;
   memcpy(t2->tf, tf, sizeof(trapframe_t));
   t2->tf->sp_el0 = t2->user_sp + (tf->sp_el0 - t1->user_sp);
   t2->tf->x[0] = 0;
