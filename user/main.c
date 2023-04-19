@@ -4,7 +4,7 @@ int main() {
   char s[] = ".";
   int fork_ret = fork();
   for (int j = 0; j < 5; j++) {
-    if (fork_ret == 0) {
+    if (fork_ret != 0) {
       write("I'm parent, PID=");
     } else {
       write("I'm child, PID=");
