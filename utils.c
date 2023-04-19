@@ -25,3 +25,14 @@ int strlen(const char *a) {
   }
   return cnt;
 }
+
+void *memcpy(void *dest, const void *src, long n) {
+  char *pDest = (char *)dest;
+  const char *pSrc = (const char *)src;
+
+  for (long i = 0; i < n; ++i) {
+    pDest[i] = pSrc[i];
+  }
+
+  return dest;
+}

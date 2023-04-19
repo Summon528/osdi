@@ -21,3 +21,9 @@ exit:
     svc #0
     ret
 
+.global fork
+fork:
+    mov x0, SYS_FORK
+    svc #0
+    ret
+
